@@ -5,17 +5,20 @@ from utils.models import CreateUpdateTracker
 
 
 class Poll(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField()
+    title = models.CharField(max_length=255, null=False, blank=False)
+    description = models.TextField(null=False, blank=True, default='')
+    active = models.BooleanField(null=False, blank=True, default=True)
 
     def __str__(self) -> str:
         return self.title
 
 
 class Question(models.Model):
-    poll = models.ForeignKey(Poll, related_name='questions', on_delete=models.CASCADE)
-    text = models.TextField()
-    question_type = models.CharField(max_length=50, choices=[('button', 'Button'), ('text', 'Text')])
+    TYPE_CHOICES = [('button', 'Button'), ('text', 'Text')]
+    poll = models.ForeignKey(Poll, related_name='questions', null=False, on_delete=models.CASCADE)
+    order = models.PositiveIntegerField(null=False, blank=True, default=1)
+    text = models.TextField(null=False, blank=False)
+    question_type = models.CharField(max_length=50, null=False, choices=TYPE_CHOICES)
 
 
 class Choice(models.Model):
