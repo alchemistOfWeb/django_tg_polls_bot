@@ -28,14 +28,8 @@ def setup_dispatcher(dp):
     """
     # polling
     dp.add_handler(CommandHandler("start", polling_handlers.command_start))
-
-    # TODO: handlers for polls 
-    # when user launch bot by "/start" command we need to show him first question of active default poll
-    # sending poll questions in loop
-    # When poll ends, send message with appriciations for passing the poll
-    # Then we must also forward messages into a new thread in special channel.
-    dp.add_handler(CallbackQueryHandler(polling_handlers.question_handling, pattern=rf"^{QUESTION_CHOICE_BTN_PRFX}_\d+"))
-
+    dp.add_handler(CallbackQueryHandler(polling_handlers.question_handling, pattern=rf"^{QUESTION_CHOICE_BTN_PRFX}-\d+$"))
+    dp.add_handler(MessageHandler(Filters.text, polling_handlers.question_message_handling))
     # admin commands
     # dp.add_handler(CommandHandler("admin", admin_handlers.admin))
     # dp.add_handler(CommandHandler("stats", admin_handlers.stats))
